@@ -33,6 +33,41 @@ resource "azurerm_public_ip" "main" {
     idle_timeout_in_minutes = 30
 }
 
+resource "azurerm_network_security_group" "main" {
+  name                = "Puppet"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  security_rule {
+    name                       = "Puppet"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8140"
+    source_address_prefix      = "10.10.0.0/29"
+    destination_address_prefix = "10.10.0.0/29"
+  }
+
+  security_rule {
+    name                        = "SSH"
+    priority                    = 110
+    direction                   = "Inbound"
+    access                      = "Allow"
+    protocol                    = "Tcp"
+    source_port_range           = "*"
+    destination_port_range      = "22"
+    source_address_prefix       = "*"
+    destination_address_prefix  = "*"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "main" {
+  subnet_id                 = azurerm_subnet.main.id
+  network_security_group_id = azurerm_network_security_group.main.id
+}
+
 resource "azurerm_network_interface" "main" {
     name                    = "${var.prefix}_nic"
     location                = azurerm_resource_group.main.location
@@ -41,7 +76,8 @@ resource "azurerm_network_interface" "main" {
     ip_configuration {
         name                            = "configuration"
         subnet_id                       = azurerm_subnet.main.id
-        private_ip_address_allocation   = "Dynamic"
+        private_ip_address_allocation   = "Static"
+        private_ip_address              = "10.10.0.4"
         public_ip_address_id            = azurerm_public_ip.main.id
     }
 }
@@ -69,8 +105,9 @@ resource "azurerm_virtual_machine" "main" {
         managed_disk_type   = "Standard_LRS"
     }
     os_profile {
-        computer_name       = "managementvm"
+        computer_name       = "puppet"
         admin_username      = "david"
+        custom_data         = file("config.sh")
     }
     os_profile_linux_config {
         disable_password_authentication = true
@@ -81,6 +118,11 @@ resource "azurerm_virtual_machine" "main" {
     }
 }
 
+data "azurerm_public_ip" "current" {
+    name                = azurerm_public_ip.main.name
+    resource_group_name = azurerm_resource_group.main.name
+}
+
 output "instance_ip_addr" {
-    value = azurerm_public_ip.main.ip_address
+    value = data.azurerm_public_ip.current.ip_address
 }
