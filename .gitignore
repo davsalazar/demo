@@ -1,0 +1,4 @@
+jenkins/.terraform
+management/.terraform
+management/terraform.tfstate
+management/terraform.tfstate.backup
