@@ -20,3 +20,6 @@ ssh-keygen -b 4096 -t rsa -f /home/david/.ssh/id_rsa -q -N ""
 
 # later
 # copy id_rsa into agent's .ssh/authorized_keys
+
+# git clone https://github.com/davsalazar/demo.git
+# 

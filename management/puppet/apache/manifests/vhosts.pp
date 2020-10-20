@@ -6,10 +6,10 @@ class apache::vhosts {
     file { "/var/www/puppet-agent.davidsdemo.com":
       ensure    => directory,
     }
-    file { "/var/www/html/puppet-agent.davidsdemo.com/public_html":
+    file { "/var/www/puppet-agent.davidsdemo.com/public_html":
       ensure    => directory,
     }
-    file { "/var/www/html/puppet-agent.davidsdemo.com/logs":
+    file { "/var/www/puppet-agent.davidsdemo.com/logs":
       ensure    => directory,
     }
 }
