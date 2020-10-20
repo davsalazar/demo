@@ -22,4 +22,5 @@ ssh-keygen -b 4096 -t rsa -f /home/david/.ssh/id_rsa -q -N ""
 # copy id_rsa into agent's .ssh/authorized_keys
 
 # git clone https://github.com/davsalazar/demo.git
-# 
+# cd demo/management/puppet/
+# sudo cp -rf apache /etc/puppetlabs/code/environments/production/modules
