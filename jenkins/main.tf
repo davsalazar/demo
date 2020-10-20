@@ -79,11 +79,11 @@ resource "azurerm_virtual_machine" "main" {
     }
 }
 
-# data "azurerm_public_ip" "current" {
-#     name                = azurerm_public_ip.main.name
-#     resource_group_name = data.azurerm_resource_group.main.name
-# }
+data "azurerm_public_ip" "current" {
+    name                = azurerm_public_ip.main.name
+    resource_group_name = data.azurerm_resource_group.main.name
+}
 
-# output "instance_ip_addr" {
-#     value = data.azurerm_public_ip.current.ip_address
-# }
+output "instance_ip_addr" {
+    value = data.azurerm_public_ip.current.ip_address
+}

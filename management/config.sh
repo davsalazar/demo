@@ -15,3 +15,8 @@ sudo /opt/puppetlabs/bin/puppetserver ca setup
 
 # later 
 # sudo /opt/puppetlabs/bin/puppetserver ca sign --certname puppet-agent.davidsdemo.com
+
+ssh-keygen -b 4096 -t rsa -f /home/david/.ssh/id_rsa -q -N ""
+
+# later
+# copy id_rsa into agent's .ssh/authorized_keys
